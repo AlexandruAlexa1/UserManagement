@@ -18,6 +18,7 @@ public class UserController {
 		List<User> listUsers = service.listUsers();
 		
 		model.addAttribute("listUsers", listUsers);
+		model.addAttribute("pageTitle", "List Users");
 		
 		return "users/users";
 	}
