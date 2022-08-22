@@ -35,7 +35,10 @@
 			<td>[[${user.lastName}]]</td>
 			<td>[[${user.Roles}]]</td>
 			<td>[[${user.Enabled}]]</td>
-			<td></td>
+			<td>
+				<a th:href="@{'/users/edit/' + ${user.id}}">Edit User</a>
+				<a th:href="@{'/users/delete/' + ${user.id}}">Delete User</a>
+			</td>
 		</tr>
 	</tbody>
 </table>

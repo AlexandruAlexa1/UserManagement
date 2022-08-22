@@ -1,6 +1,7 @@
 package com.aa.user;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,21 @@ public class UserService {
 	
 	public void save(User user) {
 		userRepo.save(user);
+	}
+
+	public User get(Integer id) throws UserNotFoundException {
+		try {
+			return userRepo.findById(id).get();
+		} catch (NoSuchElementException e) {
+			throw new UserNotFoundException("Could not find any user with ID: " + id);
+		}
+	}
+	
+	public void delete(Integer id) throws UserNotFoundException {
+		if (!userRepo.existsById(id)) {
+			throw new UserNotFoundException("Could not find any user with ID: " + id);
+		}
+		
+		userRepo.deleteById(id);
 	}
 }
