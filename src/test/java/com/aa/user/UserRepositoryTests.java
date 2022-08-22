@@ -84,4 +84,15 @@ public class UserRepositoryTests {
 		assertThat(!user.isPresent());
 	}
 	
+	@Test
+	public void testUpdateEnabledStatus() {
+		Integer userId = 2;
+		boolean enabled = true;
+		
+		repo.updateEnabledStatus(userId, enabled);
+		
+		User updatedUser = repo.findById(userId).get();
+		
+		assertThat(updatedUser.isEnabled()).isEqualTo(enabled);
+	}
 }
