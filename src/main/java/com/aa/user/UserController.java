@@ -63,6 +63,18 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping("/users/{id}/enabled/{status}")
+	public String updateEnabledStatus(@PathVariable("id") Integer id, 
+			@PathVariable("status") boolean enabled, RedirectAttributes ra) {
+		service.updateEnabledStatus(id, enabled);
+		
+		String status = enabled ? "enabled" : "disabled";
+		String message = "The user ID: " + id + " has been " + status;
+		
+		ra.addFlashAttribute("message", message);
+		return "redirect:/users";
+	}
+	
 	@GetMapping("/users/delete/{id}")
 	public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
 		try {

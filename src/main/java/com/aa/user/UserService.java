@@ -3,10 +3,13 @@ package com.aa.user;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired private UserRepository userRepo;
@@ -30,6 +33,10 @@ public class UserService {
 		} catch (NoSuchElementException e) {
 			throw new UserNotFoundException("Could not find any user with ID: " + id);
 		}
+	}
+	
+	public void updateEnabledStatus(Integer id, boolean enabled) {
+		userRepo.updateEnabledStatus(id, enabled);
 	}
 	
 	public void delete(Integer id) throws UserNotFoundException {
