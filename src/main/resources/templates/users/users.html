@@ -8,6 +8,12 @@
 
 <h1>[[${pageTitle}]]</h1>
 
+<a th:href="@{/users/new}">Create User</a>
+
+<div th:if="${message}">
+	<div>[[${message}]]</div>
+</div>
+
 <table>
 	<thead>
 		<tr>
