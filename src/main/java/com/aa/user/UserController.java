@@ -3,6 +3,7 @@ package com.aa.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +18,24 @@ public class UserController {
 	private UserService service;
 	
 	@GetMapping("/users")
-	public String listUsers(Model model) {
-		List<User> listUsers = service.listUsers();
+	public String listFirstPage(Model model) {
+		return listByPage(1, null, model);
+	}
+	
+	@GetMapping("/users/page/{pageNum}")
+	public String listByPage(@PathVariable("pageNum") int pageNum, String keyword,
+			Model model) {
+		Page<User> page = service.listByPage(pageNum, keyword);
+		List<User> listUsers = page.getContent();
 		
 		model.addAttribute("listUsers", listUsers);
-		model.addAttribute("pageTitle", "List Users");
+		model.addAttribute("totalItems", page.getNumberOfElements());
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("currentPage", pageNum);
 		
 		return "users/users";
 	}
-
+	
 	@GetMapping("/users/new")
 	public String newUser(Model model) {
 		List<Role> listRoles = service.listRoles();
