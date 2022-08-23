@@ -12,13 +12,7 @@
 </div>
 
 <!-- Search -->
-<form th:action="@{/users/page/1}">
-	<input type="hidden" name="sortField" th:value="${sortField}" />
-	<input type="hidden" name="sortDir" th:value="${sortDir}" />
-	<input type="search" name="keyword" th:value="${keyword}" required />
-	
-	<input type="submit" value="Search" />
-</form>
+<div th:replace="fragments :: search_form"></div>
 
 <table>
 	<thead>
@@ -50,31 +44,7 @@
 </table>
 
 <!-- Pagination -->
-<div>
-	<span th:unless="${totalItems > 0}">No users found</span>
-	
-	<ul th:if="${totalPages > 0}">
-		<li th:if="${currentPage > 1}">
-			<a th:href="@{'/users/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">First</a>
-		</li>
-		
-		<li th:if="${currentPage > 1}">
-			<a th:href="@{'/users/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Previous</a>
-		</li>
-		
-		<li th:each="i : ${#numbers.sequence(1, totalPages)}">
-			<a th:href="@{'/users/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">[[${i}]]</a>
-		</li>
-		
-		<li th:if="${currentPage < totalPages}">
-			<a th:href="@{'/users/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Next</a>
-		</li>
-		
-		<li th:if="${currentPage < totalPages}">
-			<a th:href="@{'/users/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Last</a>
-		</li>
-	</ul>
-</div>
+<div th:replace="fragments :: pagination"></div>
 
 </body>
 </html>

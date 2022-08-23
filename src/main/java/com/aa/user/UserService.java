@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class UserService {
-	private static final int USERS_PER_PAGE = 5;
+	private static final int USERS_PER_PAGE = 1;
 	
 	@Autowired private UserRepository userRepo;
 	@Autowired private RoleRepository roleRepo;
