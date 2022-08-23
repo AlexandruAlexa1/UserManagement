@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>[[${pageTitle}]]</title>
+	<meta charset="ISO-8859-1">
+	<title>[[${pageTitle}]]</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="stylesheet" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"/>
+	<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 </head>
 <body>
 
@@ -16,7 +21,9 @@
 
 <!-- Search -->
 <form th:action="@{/users/page/1}">
-	<input type="search" name="keyword" required />
+	<input type="hidden" name="sortField" th:value="${sortField}" />
+	<input type="hidden" name="sortDir" th:value="${sortDir}" />
+	<input type="search" name="keyword" th:value="${keyword}" required />
 	
 	<input type="submit" value="Search" />
 </form>
@@ -24,12 +31,12 @@
 <table>
 	<thead>
 		<tr>
-			<th>ID</th>
-			<th>E-mail</th>
-			<th>First Name</th>
-			<th>Last Name</th>
+			<th th:replace="fragments :: column_link('id', 'ID')"></th>
+			<th th:replace="fragments :: column_link('email', 'E-mail')"></th>
+			<th th:replace="fragments :: column_link('firstName', 'First Name')"></th>
+			<th th:replace="fragments :: column_link('lastName', 'Last Name')"></th>
 			<th>Roles</th>
-			<th>Enabled</th>
+			<th th:replace="fragments :: column_link('enabled', 'Enabled')"></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -56,23 +63,23 @@
 	
 	<ul th:if="${totalPages > 0}">
 		<li th:if="${currentPage > 1}">
-			<a th:href="@{/users/page/1}">First</a>
+			<a th:href="@{'/users/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">First</a>
 		</li>
 		
 		<li th:if="${currentPage > 1}">
-			<a th:href="@{'/users/page/' + ${currentPage - 1}}">Previous</a>
+			<a th:href="@{'/users/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Previous</a>
 		</li>
 		
 		<li th:each="i : ${#numbers.sequence(1, totalPages)}">
-			<a th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
+			<a th:href="@{'/users/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">[[${i}]]</a>
 		</li>
 		
 		<li th:if="${currentPage < totalPages}">
-			<a th:href="@{'/users/page/' + ${currentPage + 1}}">Next</a>
+			<a th:href="@{'/users/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Next</a>
 		</li>
 		
 		<li th:if="${currentPage < totalPages}">
-			<a th:href="@{'/users/page/' + ${totalPages}}">Last</a>
+			<a th:href="@{'/users/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Last</a>
 		</li>
 	</ul>
 </div>

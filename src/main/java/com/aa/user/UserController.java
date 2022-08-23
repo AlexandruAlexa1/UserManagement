@@ -19,19 +19,27 @@ public class UserController {
 	
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, null, model);
+		return listByPage(1, "id", "asc", null, model);
 	}
 	
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable("pageNum") int pageNum, String keyword,
-			Model model) {
-		Page<User> page = service.listByPage(pageNum, keyword);
+	public String listByPage(@PathVariable("pageNum") int pageNum, String sortField,
+			String sortDir, String keyword, Model model) {
+		Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
 		List<User> listUsers = page.getContent();
 		
 		model.addAttribute("listUsers", listUsers);
 		model.addAttribute("totalItems", page.getNumberOfElements());
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("keyword", keyword);
+		
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+		model.addAttribute("reverseSortDir", reverseSortDir);
+		
+		model.addAttribute("moduleURL", "/users");
 		
 		return "users/users";
 	}
