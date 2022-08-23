@@ -39,6 +39,7 @@ public class UserController {
 		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		
+		model.addAttribute("pageTitle", "List Users");
 		model.addAttribute("moduleURL", "/users");
 		
 		return "users/users";

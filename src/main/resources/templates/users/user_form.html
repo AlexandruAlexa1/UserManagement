@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
-<title>[[${pageTitle}]]</title>
-</head>
+<head th:replace="fragments :: page_head(${pageTitle})"></head>
 <body>
 
 <h1>Manage Users | [[${pageTitle}]]</h1>
