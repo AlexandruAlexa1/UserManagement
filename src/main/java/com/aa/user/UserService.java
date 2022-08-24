@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,10 @@ public class UserService {
 	private static final int USERS_PER_PAGE = 5;
 	
 	@Autowired private UserRepository userRepo;
+	
 	@Autowired private RoleRepository roleRepo;
+	
+	@Autowired private PasswordEncoder passwordEncoder;
 	
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
@@ -38,9 +42,15 @@ public class UserService {
 	}
 	
 	public void save(User user) {
+		encodePassword(user);
 		userRepo.save(user);
 	}
 	
+	private void encodePassword(User user) {
+		String passwordEncoded = passwordEncoder.encode(user.getPassword());
+		user.setPassword(passwordEncoded);
+	}
+
 	public boolean isEmailUnique(String email) {
 		User userByEmail = userRepo.getUserByEmail(email);
 		
