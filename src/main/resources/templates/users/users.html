@@ -1,38 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
-<title>[[${pageTitle}]]</title>
-</head>
+<head th:replace="fragments :: page_head(${pageTitle})"></head>
 <body>
 
-<h1>[[${pageTitle}]]</h1>
+<h1 class="title">[[${pageTitle}]]</h1>
 
-<table>
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>E-mail</th>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Roles</th>
-			<th>Enabled</th>
-			<th></th>
-		</tr>
-	</thead>
+
+<div class="table-wrapper">
+	<a th:href="@{/users/new}" class="fa-solid fa-user-plus add-user-btn" title="Add new User"></a>
+
+	<!-- Message -->
+	<div th:if="${message}" class="message">
+		<div>[[${message}]]</div>
+	</div>
 	
-	<tbody>
-		<tr th:each="user : ${listUsers}">
-			<td>[[${user.id}]]</td>
-			<td>[[${user.email}]]</td>
-			<td>[[${user.firstName}]]</td>
-			<td>[[${user.lastName}]]</td>
-			<td>[[${user.Roles}]]</td>
-			<td>[[${user.Enabled}]]</td>
-			<td></td>
-		</tr>
-	</tbody>
-</table>
+	<!-- Search -->
+	<div th:replace="fragments :: search_form"></div>
+	
+	<table>
+		<thead>
+			<tr>
+				<th th:replace="fragments :: column_link('id', 'ID')"></th>
+				<th th:replace="fragments :: column_link('email', 'E-mail')"></th>
+				<th th:replace="fragments :: column_link('firstName', 'First Name')"></th>
+				<th th:replace="fragments :: column_link('lastName', 'Last Name')"></th>
+				<th>Roles</th>
+				<th th:replace="fragments :: column_link('enabled', 'Enabled')"></th>
+				<th></th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="user : ${listUsers}">
+				<td>[[${user.id}]]</td>
+				<td>[[${user.email}]]</td>
+				<td>[[${user.firstName}]]</td>
+				<td>[[${user.lastName}]]</td>
+				<td>[[${user.Roles}]]</td>
+				<td>
+					<a th:if="${user.enabled}" th:href="'/users/' + ${user.id} + '/enabled/false'"
+						class="fa-solid fa-square-check enable-user-btn" title="Disable this User"></a>
+					<a th:unless="${user.enabled}" th:href="'/users/' + ${user.id} + '/enabled/true'"
+						class="fa-solid fa-square-check disable-user-btn" title="Enable this User"></a>
+				</td>
+				<td>
+					<a th:href="@{'/users/edit/' + ${user.id}}" class="fas fa-user-edit edit-user-btn" title="Edit User"></a>
+					<a th:href="@{'/users/delete/' + ${user.id}}" th:entityId="${user.id}"
+						 class="fa-solid fa-user-xmark delete-user-btn link-delete" title="Delete User"></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<!-- Pagination -->
+	<div th:replace="fragments :: pagination"></div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="confirm-modal">
+	<div class="modal-content">
+		<h1>Delete Confirmation</h1>
+		<p class="modal-message"></p>
+		<div class="modal-btns">
+			<a href="" class="modal-btn delete-link">YES</a>
+			<a th:href="@{${moduleURL}}" class="modal-btn">NO</a>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		handleLinkDelete();
+	});
+	
+	function handleLinkDelete() {
+		$('.link-delete').on('click', function(e) {
+			e.preventDefault();
+			
+			url = $(this).attr('href');
+			entityId = $(this).attr('entityId');
+			
+			$('.confirm-modal').fadeIn('2000');
+			$('.modal-content .modal-message').text('You are sure you want to delete user with ID: ' + entityId + '?');
+			$('.delete-link').attr('href', url);
+		});
+	}
+</script>
 
 </body>
 </html>

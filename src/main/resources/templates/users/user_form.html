@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments :: page_head(${pageTitle})"></head>
+<body>
+
+<h1 class="title">Manage Users | [[${pageTitle}]]</h1>
+
+<form th:action="@{/users/save}" th:object="${user}" method="post" class="user-from" onsubmit="return checkEmailUnique(this)">
+	<input type="hidden" th:field="*{id}" />
+	
+	<div class="input-group">
+		<label>First Name:</label>
+		<input type="text" th:field="*{firstName}" maxlength="45" required="required" />
+	</div>
+	
+	<div class="input-group">
+		<label>Last Name:</label>
+		<input type="text" th:field="*{lastName}" maxlength="45" required="required" />
+	</div>
+	
+	<div class="input-group">
+		<label>E-mail:</label>
+		<input type="email" th:field="*{email}" maxlength="128" required="required" />
+	</div>
+	
+	<div class="input-group">
+		<label>Password:</label>
+		<input type="password" th:field="*{password}" maxlength="65" required="required" />
+	</div>
+	
+	<div class="user-roles">
+		<label>Roles:</label>
+		
+		<th:block th:each="role : ${listRoles}">
+		<div class="user-role">
+			<input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+			<div><span>[[${role.name}]]</span> [[${role.description}]]</div>
+		</div>
+		</th:block>
+	</div>
+	
+	<div class="input-group">
+		<label>Enable:</label>
+		<input type="checkbox" th:field="*{enabled}" />
+	</div>
+	
+	<a th:href="@{/users}" class="fas fa-xmark close-form-btn"></a>
+	<input type="submit" value="Save" class="submit-btn" />
+</form>
+
+<script type="text/javascript">
+	function checkEmailUnique(form) {
+		url = '/users/check_email';
+		email = $('#email').val();
+		csrf = $("input[name='_csrf']").val();
+		params = {email: email, _csrf: csrf};
+		
+		$.post(url, params, (response) => {
+			if (response == 'OK') {
+				form.submit();
+			} else {
+				alert('This E-mail already exists. Please chose another E-mail!');
+			}
+		});
+		
+		return false;
+	}
+</script>
+</body>
+</html>
