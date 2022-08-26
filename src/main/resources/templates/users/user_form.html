@@ -3,48 +3,49 @@
 <head th:replace="fragments :: page_head(${pageTitle})"></head>
 <body>
 
-<h1>Manage Users | [[${pageTitle}]]</h1>
+<h1 class="title">Manage Users | [[${pageTitle}]]</h1>
 
-<form th:action="@{/users/save}" th:object="${user}" method="post">
+<form th:action="@{/users/save}" th:object="${user}" method="post" class="user-from">
 	<input type="hidden" th:field="*{id}" />
 	
-	<div>
+	<div class="input-group">
 		<label>First Name:</label>
 		<input type="text" th:field="*{firstName}" maxlength="45" required="required" />
 	</div>
 	
-	<div>
+	<div class="input-group">
 		<label>Last Name:</label>
 		<input type="text" th:field="*{lastName}" maxlength="45" required="required" />
 	</div>
 	
-	<div>
+	<div class="input-group">
 		<label>E-mail:</label>
 		<input type="email" th:field="*{email}" maxlength="128" required="required" />
 	</div>
 	
-	<div>
+	<div class="input-group">
 		<label>Password:</label>
 		<input type="password" th:field="*{password}" maxlength="65" required="required" />
 	</div>
 	
-	<div>
+	<div class="user-roles">
 		<label>Roles:</label>
+		
 		<th:block th:each="role : ${listRoles}">
-		<div>
+		<div class="user-role">
 			<input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
-			<div>[[${role.name}]] [[${role.description}]]</div>
+			<div><span>[[${role.name}]]</span> [[${role.description}]]</div>
 		</div>
-	</th:block>
+		</th:block>
 	</div>
 	
-	<div>
+	<div class="input-group">
 		<label>Enable:</label>
 		<input type="checkbox" th:field="*{enabled}" />
 	</div>
 	
-	<a th:href="@{/users}">Back</a>
-	<input type="submit" value="Save" />
+	<a th:href="@{/users}" class="fas fa-xmark close-form-btn"></a>
+	<input type="submit" value="Save" class="submit-btn" />
 </form>
 
 </body>

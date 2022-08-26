@@ -30,6 +30,7 @@ public class DBLoader {
 		User user1 = new User("Alex", "Stevenson", "alex1.stevenson@outlook.com", "password");
 		user1.setRole(new Role(1));
 		user1.setRole(new Role(2));
+		user1.setEnabled(true);
 		
 		User user2 = new User("Alisa", "Willcox", "alisa.willcox7@gmail.com", "password");
 		user2.setRole(new Role(2));
