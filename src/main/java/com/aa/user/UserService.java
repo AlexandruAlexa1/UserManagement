@@ -40,6 +40,14 @@ public class UserService {
 	public void save(User user) {
 		userRepo.save(user);
 	}
+	
+	public boolean isEmailUnique(String email) {
+		User userByEmail = userRepo.getUserByEmail(email);
+		
+		if (userByEmail == null) return true;
+		
+		return false;
+	}
 
 	public User get(Integer id) throws UserNotFoundException {
 		try {
@@ -60,4 +68,5 @@ public class UserService {
 		
 		userRepo.deleteById(id);
 	}
+	
 }

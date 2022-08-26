@@ -5,7 +5,7 @@
 
 <h1 class="title">Manage Users | [[${pageTitle}]]</h1>
 
-<form th:action="@{/users/save}" th:object="${user}" method="post" class="user-from">
+<form th:action="@{/users/save}" th:object="${user}" method="post" class="user-from" onsubmit="return checkEmailUnique(this)">
 	<input type="hidden" th:field="*{id}" />
 	
 	<div class="input-group">
@@ -48,5 +48,23 @@
 	<input type="submit" value="Save" class="submit-btn" />
 </form>
 
+<script type="text/javascript">
+	function checkEmailUnique(form) {
+		url = '/users/check_email';
+		email = $('#email').val();
+		csrf = $("input[name='_csrf']").val();
+		params = {email: email, _csrf: csrf};
+		
+		$.post(url, params, (response) => {
+			if (response == 'OK') {
+				form.submit();
+			} else {
+				alert('This E-mail already exists. Please chose another E-mail!');
+			}
+		});
+		
+		return false;
+	}
+</script>
 </body>
 </html>

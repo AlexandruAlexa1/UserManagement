@@ -6,8 +6,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
 public class UserRepositoryTests {
 
@@ -109,5 +106,14 @@ public class UserRepositoryTests {
 		assertThat(listUsers).size().isGreaterThan(0);
 		
 		listUsers.forEach(user -> System.out.println(user));
+	}
+	
+	@Test
+	public void testFindByEmail() {
+		String email = "alisa.willcox7@gmail.com";
+		User user = repo.getUserByEmail(email);
+		
+		assertThat(user).isNotNull();
+		assertThat(user.getId()).isGreaterThan(0);
 	}
 }
